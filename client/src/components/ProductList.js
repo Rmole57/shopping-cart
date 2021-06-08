@@ -1,27 +1,30 @@
 import React from "react";
 import Togglable from "./Togglable.js";
 import Product from "./Product.js"
-import ProductForm from "./ProductForm.js"
+import AddProductForm from "./AddProductForm.js"
 
 
-const ProductList = ({ products }) => {
+
+const ProductList = ({ products, onAddProduct, onEditProduct }) => {
   return (
     <div className="product-listing">
       <h2>Products</h2>
 
       {products.map((product) => {
-        console.log(product);
+        const { _id, title, quantity, price } = product
         return (
-          <Product key={product.id}
-            id={product.id}
-            title={product.title}
-            price={product.price}
-            quantity={product.quantity} />
+          <Product
+            key={_id}
+            id={_id}
+            title={title}
+            price={price}
+            quantity={quantity}
+            onSubmission={onEditProduct} />
         )
       })}
       
       <Togglable buttonLabel="Add A Product">
-        <ProductForm type="Add" />
+        <AddProductForm onSubmission={onAddProduct} />
       </Togglable>
     </div>
   )

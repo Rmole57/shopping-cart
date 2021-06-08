@@ -1,32 +1,60 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 
-const ProductForm = ({type, title, price, quantity}) => {
-  return (
-    <div className="add-form visible">
-      <p><a className="button add-product-button">{type} A Product</a></p>
-      <h3>{type} Product</h3>
-      <form>
-        <div className="input-group">
-          <label for="product-name">Product Name</label>
-          <input type="text" id="product-name" value={title ? title : ""}/>
-        </div>
+// const ProductForm = ({formType, title, price, quantity, onSubmission}) => {
+  
+//   const handleSubmission = (e) => {
+//     e.preventDefault();
+//     const newProduct = {
+//     title: newTitle, price: newPrice, quantity: newQuantity,
+//     }
 
-        <div className="input-group">
-          <label for="product-price">Price</label>
-          <input type="text" id="product-price" value={price ? price : ""}/>
-        </div>
+//     onSubmission(newProduct); 
+//     resetInputs();
+//   }
 
-        <div className="input-group">
-          <label for="product-quantity">Quantity</label>
-          <input type="text" id="product-quantity" value={quantity !== undefined ? quantity : ""}/>
-        </div>
+//   return (
+//     <>
+//       <form id="product-form"> 
+//         <div className="input-group">
+//           <label htmlFor="product-name">Product Name</label>
+//           <input 
+//             type="text" 
+//             id="product-name" 
+//             value={newTitle}
+//             onChange = {(e) => setNewTitle(e.target.value)}
+//             />
+//         </div>
 
-        <div className="actions form-actions">
-          <a className="button">{type === "Add" ? "Add" : "Update"}</a>
-        </div>
-      </form>
-    </div>
-  )
-}
+//         <div className="input-group">
+//           <label htmlFor="product-price">Price</label>
+//           <input 
+//             type="text" 
+//             id="product-price" 
+//             value={newPrice}
+//             onChange = {(e) => setNewPrice(e.target.value)}
+//             />
+//         </div>
 
-export default ProductForm;
+//         <div className="input-group">
+//           <label htmlFor="product-quantity">Quantity</label>
+//           <input 
+//             type="text" 
+//             id="product-quantity" 
+//             value={newQuantity}
+//             onChange = {(e) => setNewQuantity(e.target.value)}
+//             />
+//         </div>
+
+//         <div className="actions form-actions">
+//           <a 
+//             className="button" 
+//             onClick={handleSubmission}>
+//               {formType === "Add" ? "Add" : "Update"}
+//           </a>
+//         </div>
+//       </form>
+//     </>
+//   )
+// }
+
+// export default ProductForm;
