@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { useDispatch } from "react-redux"
+import { productEditedSuccess } from "../actions/productActions"
 
 const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
   const [newTitle, setNewTitle] = useState(title);
   const [newPrice, setNewPrice] = useState(price);
   const [newQuantity, setNewQuantity] = useState(quantity);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     setNewQuantity(quantity);
   }, [quantity]);
 
-  const handleSubmission = (e) => {
+  const handleEditProduct = (e) => {
     e.preventDefault();
-
-    const newProduct = {
-      title: newTitle, price: newPrice, quantity: newQuantity, id,
-    }
-
-    onSubmission(newProduct);
+    
+    const updatedProduct = { 
+      title: newTitle, 
+      quantity: newQuantity, 
+      price: newPrice }
+    axios
+      .put(`/api/products/${id}`, updatedProduct)
+      .then(response =>  {
+        dispatch(productEditedSuccess(response.data))
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -54,7 +64,7 @@ const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
         <div className="actions form-actions">
           <a 
             className="button" 
-            onClick={handleSubmission}>Update
+            onClick={handleEditProduct}>Update
           </a>
         </div>
       </form>

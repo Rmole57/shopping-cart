@@ -1,23 +1,33 @@
 import React, { useState } from "react"
+import axios from "axios"
+import { useDispatch } from "react-redux"
+import { productAddedSuccess } from "../actions/productActions"
 
-const AddProductForm = ({ onSubmission }) => {
-    const [newTitle, setNewTitle] = useState("");
-    const [newPrice, setNewPrice] = useState("");
-    const [newQuantity, setNewQuantity] = useState("");
+const AddProductForm = () => {
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState("");
+    const [quantity, setQuantity] = useState("");
+
+    const dispatch = useDispatch();
 
     const resetInputs = () => {
-        setNewTitle("");
-        setNewPrice("");
-        setNewQuantity("");
+        setTitle("");
+        setPrice("");
+        setQuantity("");
     };
 
-    const handleSubmission = (e) => {
+    const handleAddProduct = (e) => {
       e.preventDefault();
-      const newProduct = {
-        title: newTitle, price: newPrice, quantity: newQuantity,
-      }
-  
-      onSubmission(newProduct); 
+
+      const newProduct = { title, price, quantity };
+
+      axios
+        .post("/api/products", newProduct)
+        .then(response => {
+          dispatch(productAddedSuccess(response.data))
+        })
+        .catch((err) => console.log(err));
+
       resetInputs();
     }
     
@@ -31,8 +41,8 @@ const AddProductForm = ({ onSubmission }) => {
             <input 
               type="text" 
               id="product-name" 
-              value={newTitle}
-              onChange = {(e) => setNewTitle(e.target.value)}
+              value={title}
+              onChange = {(e) => setTitle(e.target.value)}
               />
           </div>
 
@@ -41,8 +51,8 @@ const AddProductForm = ({ onSubmission }) => {
             <input 
               type="text" 
               id="product-price" 
-              value={newPrice}
-              onChange = {(e) => setNewPrice(e.target.value)}
+              value={price}
+              onChange = {(e) => setPrice(e.target.value)}
               />
           </div>
 
@@ -51,13 +61,13 @@ const AddProductForm = ({ onSubmission }) => {
             <input 
               type="text" 
               id="product-quantity" 
-              value={newQuantity}
-              onChange = {(e) => setNewQuantity(e.target.value)}
+              value={quantity}
+              onChange = {(e) => setQuantity(e.target.value)}
               />
           </div>
 
           <div className="actions form-actions">
-            <a className="button" onClick={handleSubmission}>Add</a>
+            <a className="button" onClick={handleAddProduct}>Add</a>
           </div>
         </form>
       </div>

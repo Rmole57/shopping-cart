@@ -1,24 +1,47 @@
-import React from "react";
-import Togglable from "./Togglable.js";
+import React from "react"
+import axios from "axios"
+import { useDispatch, useSelector } from "react-redux"
+import { productDeletedSuccess, productEditedSuccess } from "../actions/productActions"
+import { cartItemAddedSuccess } from "../actions/cartActions"
+ 
+import Togglable from "./Togglable.js"
 import EditProductForm from "./EditProductForm.js"
 
-
-const Product = ({title, price, quantity, id, onSubmission, onDelete, onAddToCart}) => {
-  const handleDelete = (e) => {
-    e.preventDefault();
-    onDelete(id);
-  }
+const Product = ({title, price, quantity, id}) => {
+  const dispatch = useDispatch();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
-
     if (quantity <= 0) return;
 
-    const newProduct = {
-      title, price, id, quantity
-    }
+    const updatedProduct = { title, price, quantity: quantity - 1, id }
     
-    onAddToCart(newProduct);
+    axios
+      .put(`/api/products/${id}`, updatedProduct)
+      .then(response =>  {
+        dispatch(productEditedSuccess(response.data))
+      })
+      .catch((err) => console.log(err));
+  
+    const productToAdd = { productId: id, title, price };
+  
+    axios
+      .post("/api/cart", productToAdd)
+      .then(response => {
+        dispatch(cartItemAddedSuccess(response.data))
+      }) 
+      .catch((err) => console.log(err));
+  }
+
+  const handleDeleteProduct = (e) => {
+    e.preventDefault();
+
+    axios
+      .delete(`/api/products/${id}`)
+      .then(() => {
+        dispatch(productDeletedSuccess(id));
+      })
+      .catch((err) => console.log(err));
   }
   
   return (
@@ -35,11 +58,10 @@ const Product = ({title, price, quantity, id, onSubmission, onDelete, onAddToCar
               title={title}
               price={price}
               quantity={quantity}
-              id={id}
-              onSubmission={onSubmission} />
+              id={id} />
           </Togglable>
         </div>
-        <a href="#" onClick={handleDelete} className="delete-button"><span>X</span></a>
+        <a href="#" onClick={handleDeleteProduct} className="delete-button"><span>X</span></a>
       </div>
     </div>
 

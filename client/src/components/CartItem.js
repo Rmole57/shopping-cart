@@ -10,5 +10,4 @@ const CartItem = ({ title, price, quantity }) => {
   );
 }
 
-
 export default CartItem

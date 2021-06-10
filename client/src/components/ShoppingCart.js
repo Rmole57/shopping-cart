@@ -1,7 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import CartItem from "./CartItem.js"
+import axios from "axios"
+import { useDispatch, useSelector } from "react-redux"
+import { cartReceivedSuccess, cartCheckoutSuccess } from "../actions/cartActions"
 
-const ShoppingCart = ({ cartItems, onCheckout }) => {
+const ShoppingCart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector(state => state.cart)
+  
   const calculateTotal = () => {
     const total = cartItems.reduce((total, item) => {
       return total + item.price * item.quantity;
@@ -10,11 +16,21 @@ const ShoppingCart = ({ cartItems, onCheckout }) => {
 
     return total.toFixed(2);
   }
-
+  
   const handleCheckout = (e) => {
     e.preventDefault();
-    onCheckout(); 
+    
+    axios
+      .post("/api/cart/checkout")
+      .then(() => dispatch(cartCheckoutSuccess()))
+      .catch((err) => console.log(err));
   }
+
+  useEffect(() => {    
+    axios.get("/api/cart")
+      .then(response => dispatch(cartReceivedSuccess(response.data)))
+      .catch((err) => console.log(err));
+  }, [dispatch]);
 
   return  (
     <div className="cart">
@@ -47,7 +63,6 @@ const ShoppingCart = ({ cartItems, onCheckout }) => {
       </a>
     </div>
   )
-  };
+};
 
-  export default ShoppingCart
-
+export default ShoppingCart
