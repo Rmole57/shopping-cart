@@ -3,7 +3,24 @@ import Togglable from "./Togglable.js";
 import EditProductForm from "./EditProductForm.js"
 
 
-const Product = ({title, price, quantity, id, onSubmission}) => {
+const Product = ({title, price, quantity, id, onSubmission, onDelete, onAddToCart}) => {
+  const handleDelete = (e) => {
+    e.preventDefault();
+    onDelete(id);
+  }
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+
+    if (quantity <= 0) return;
+
+    const newProduct = {
+      title, price, id, quantity
+    }
+    
+    onAddToCart(newProduct);
+  }
+  
   return (
     <div className="product">
       <div className="product-details">
@@ -12,7 +29,7 @@ const Product = ({title, price, quantity, id, onSubmission}) => {
         <p className="quantity">{quantity} left in stock</p>
 
         <div className="actions product-actions">
-          <a href="#" className="button add-to-cart">Add to Cart</a>
+          <a href="#" onClick={handleAddToCart} className={`button add-to-cart${quantity > 0 ? "" : " disabled"}`}>Add to Cart</a>
           <Togglable buttonLabel="Edit">
             <EditProductForm
               title={title}
@@ -22,7 +39,7 @@ const Product = ({title, price, quantity, id, onSubmission}) => {
               onSubmission={onSubmission} />
           </Togglable>
         </div>
-        <a href="#" className="delete-button"><span>X</span></a>
+        <a href="#" onClick={handleDelete} className="delete-button"><span>X</span></a>
       </div>
     </div>
 

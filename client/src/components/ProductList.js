@@ -5,7 +5,7 @@ import AddProductForm from "./AddProductForm.js"
 
 
 
-const ProductList = ({ products, onAddProduct, onEditProduct }) => {
+const ProductList = ({ products, onAddProduct, onEditProduct, onDeleteProduct, onAddToCart }) => {
   return (
     <div className="product-listing">
       <h2>Products</h2>
@@ -19,7 +19,9 @@ const ProductList = ({ products, onAddProduct, onEditProduct }) => {
             title={title}
             price={price}
             quantity={quantity}
-            onSubmission={onEditProduct} />
+            onSubmission={onEditProduct}
+            onDelete={onDeleteProduct} 
+            onAddToCart={onAddToCart} />
         )
       })}
       

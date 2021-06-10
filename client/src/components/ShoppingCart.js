@@ -1,14 +1,53 @@
 import React from "react"
+import CartItem from "./CartItem.js"
 
-const ShoppingCart = () => {
-    return  (
-      <div className="cart">
-        <h2>Your Cart</h2>
+const ShoppingCart = ({ cartItems, onCheckout }) => {
+  const calculateTotal = () => {
+    const total = cartItems.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0)
+
+
+    return total.toFixed(2);
+  }
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    onCheckout(); 
+  }
+
+  return  (
+    <div className="cart">
+      <h2>Your Cart</h2>
+      {cartItems.length === 0 ?
         <p>Your cart is empty</p>
-        <p>Total: $0</p>
-        <a href="#" className="button checkout disabled">Checkout</a>
-      </div>
-    )
+        : <table className="cart-items">
+            <tbody>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+              {cartItems.map(item => (
+                <CartItem key={item._id}
+                  title={item.title}
+                  price={item.price}
+                  quantity={item.quantity} />
+              ))}
+              <tr>
+                <td colSpan="3" className="total">Total: ${calculateTotal()}</td>
+              </tr>
+            </tbody>
+          </table>
+      }
+      <a href="#"
+        className={`button checkout${cartItems.length === 0 ? " disabled" : ""}`}
+        onClick={handleCheckout}>
+          Checkout
+      </a>
+    </div>
+  )
   };
 
   export default ShoppingCart
+

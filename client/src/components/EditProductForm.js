@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
   const [newTitle, setNewTitle] = useState(title);
   const [newPrice, setNewPrice] = useState(price);
   const [newQuantity, setNewQuantity] = useState(quantity);
 
+  useEffect(() => {
+    setNewQuantity(quantity);
+  }, [quantity]);
+
   const handleSubmission = (e) => {
     e.preventDefault();
+
     const newProduct = {
       title: newTitle, price: newPrice, quantity: newQuantity, id,
     }
@@ -25,8 +30,7 @@ const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
             type="text" 
             id="product-name" 
             value={newTitle}
-            onChange = {(e) => setNewTitle(e.target.value)}
-            />
+            onChange = {(e) => setNewTitle(e.target.value)}/>
         </div>
 
         <div className="input-group">
@@ -35,8 +39,7 @@ const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
             type="text" 
             id="product-price" 
             value={newPrice}
-            onChange = {(e) => setNewPrice(e.target.value)}
-            />
+            onChange = {(e) => setNewPrice(e.target.value)} />
         </div>
 
         <div className="input-group">
@@ -45,8 +48,7 @@ const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
             type="text" 
             id="product-quantity" 
             value={newQuantity}
-            onChange = {(e) => setNewQuantity(e.target.value)}
-            />
+            onChange = {(e) => setNewQuantity(e.target.value)}/>
         </div>
 
         <div className="actions form-actions">
