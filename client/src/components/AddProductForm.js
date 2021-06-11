@@ -1,7 +1,6 @@
 import React, { useState } from "react"
-import axios from "axios"
 import { useDispatch } from "react-redux"
-import { productAddedSuccess } from "../actions/productActions"
+import { productAdded } from "../actions/productActions"
 
 const AddProductForm = () => {
     const [title, setTitle] = useState("");
@@ -18,17 +17,8 @@ const AddProductForm = () => {
 
     const handleAddProduct = (e) => {
       e.preventDefault();
-
       const newProduct = { title, price, quantity };
-
-      axios
-        .post("/api/products", newProduct)
-        .then(response => {
-          dispatch(productAddedSuccess(response.data))
-        })
-        .catch((err) => console.log(err));
-
-      resetInputs();
+      dispatch(productAdded(newProduct, resetInputs));
     }
     
     return (

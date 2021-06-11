@@ -1,6 +1,7 @@
 import React from "react"
 import ShoppingCart from "./ShoppingCart.js"
-import ProductList from "./ProductList.js"         
+import ProductList from "./ProductList.js"    
+
 
 const App = () => {
   return (

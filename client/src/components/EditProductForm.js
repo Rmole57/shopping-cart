@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useDispatch } from "react-redux"
-import { productEditedSuccess } from "../actions/productActions"
+import { productEdited } from "../actions/productActions"
 
 const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
   const [newTitle, setNewTitle] = useState(title);
@@ -16,17 +16,14 @@ const EditProductForm = ({id, title, price, quantity, onSubmission}) => {
 
   const handleEditProduct = (e) => {
     e.preventDefault();
-    
+
     const updatedProduct = { 
       title: newTitle, 
       quantity: newQuantity, 
-      price: newPrice }
-    axios
-      .put(`/api/products/${id}`, updatedProduct)
-      .then(response =>  {
-        dispatch(productEditedSuccess(response.data))
-      })
-      .catch((err) => console.log(err));
+      price: newPrice
+    }
+
+    dispatch(productEdited(id, updatedProduct));
   }
 
   return (

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
-import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
-import { productsReceivedSuccess } from "../actions/productActions"
+import { productsReceived } from "../actions/productActions"
 
 import Togglable from "./Togglable.js"
 import Product from "./Product.js"
@@ -12,10 +11,7 @@ const ProductList = () => {
   const products = useSelector((state) => state.products);
 
   useEffect(() => {
-    axios.get("/api/products")
-      .then((response) => response.data)
-      .then((data) => dispatch(productsReceivedSuccess(data)))
-      .catch((err) => console.log(err));
+    dispatch(productsReceived());
   }, [dispatch]);
 
   return (

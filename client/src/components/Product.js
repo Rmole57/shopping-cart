@@ -1,47 +1,29 @@
 import React from "react"
 import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
-import { productDeletedSuccess, productEditedSuccess } from "../actions/productActions"
-import { cartItemAddedSuccess } from "../actions/cartActions"
+import { productDeleted, productEdited } from "../actions/productActions"
+import { cartItemAdded } from "../actions/cartActions"
  
 import Togglable from "./Togglable.js"
 import EditProductForm from "./EditProductForm.js"
 
-const Product = ({title, price, quantity, id}) => {
+const Product = ({ id, title, price, quantity }) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     if (quantity <= 0) return;
 
-    const updatedProduct = { title, price, quantity: quantity - 1, id }
-    
-    axios
-      .put(`/api/products/${id}`, updatedProduct)
-      .then(response =>  {
-        dispatch(productEditedSuccess(response.data))
-      })
-      .catch((err) => console.log(err));
+    const updatedProduct = { title, price, quantity: quantity - 1 }
+    dispatch(productEdited(id, updatedProduct));
   
     const productToAdd = { productId: id, title, price };
-  
-    axios
-      .post("/api/cart", productToAdd)
-      .then(response => {
-        dispatch(cartItemAddedSuccess(response.data))
-      }) 
-      .catch((err) => console.log(err));
+    dispatch(cartItemAdded(productToAdd));
   }
 
   const handleDeleteProduct = (e) => {
     e.preventDefault();
-
-    axios
-      .delete(`/api/products/${id}`)
-      .then(() => {
-        dispatch(productDeletedSuccess(id));
-      })
-      .catch((err) => console.log(err));
+    dispatch(productDeleted(id))
   }
   
   return (

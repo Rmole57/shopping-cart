@@ -2,35 +2,32 @@ import React, { useEffect } from "react"
 import CartItem from "./CartItem.js"
 import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
-import { cartReceivedSuccess, cartCheckoutSuccess } from "../actions/cartActions"
+import { cartReceived, cartCheckout } from "../actions/cartActions"
+
+
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart)
+  
+  useEffect(() => {
+    dispatch(cartReceived())
+  }, [dispatch]);
   
   const calculateTotal = () => {
     const total = cartItems.reduce((total, item) => {
       return total + item.price * item.quantity;
     }, 0)
 
-
     return total.toFixed(2);
   }
   
   const handleCheckout = (e) => {
     e.preventDefault();
-    
-    axios
-      .post("/api/cart/checkout")
-      .then(() => dispatch(cartCheckoutSuccess()))
-      .catch((err) => console.log(err));
+    dispatch(cartCheckout())
   }
 
-  useEffect(() => {    
-    axios.get("/api/cart")
-      .then(response => dispatch(cartReceivedSuccess(response.data)))
-      .catch((err) => console.log(err));
-  }, [dispatch]);
+  
 
   return  (
     <div className="cart">
